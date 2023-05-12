@@ -21,4 +21,4 @@ const addDiary = () => {
   return null;
 };
 
-export { getEntries, addDiary, getNonSensitiveEntries };
+export default { getEntries, addDiary, getNonSensitiveEntries };
