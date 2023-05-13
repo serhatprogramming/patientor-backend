@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import patienData from "../../data/patients";
+import patients from "../../data/patients";
 
-const getPatients = () => {
-  return patienData;
+import { Patient, NonSensitivePatientData } from "../types";
+
+const getPatients = (): Patient[] => {
+  return patients;
 };
 
-export default { getPatients };
+const getPatientsWithNoSensitiveData = (): NonSensitivePatientData[] => {
+  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+    id,
+    name,
+    dateOfBirth,
+    gender,
+    occupation,
+  }));
+};
+
+export default { getPatients, getPatientsWithNoSensitiveData };
