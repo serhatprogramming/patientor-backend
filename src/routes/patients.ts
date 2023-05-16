@@ -8,7 +8,12 @@ import toNewPatient from "../utils";
 const router = express.Router();
 
 router.get("/", (_req, res) => {
-  res.send(patientService.getPatientsWithNoSensitiveData());
+  res.send(patientService.getPatients());
+});
+
+router.get("/:id", (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  res.send(patientService.getPatientInfo(req.params.id));
 });
 
 router.post("/", (req, res) => {
