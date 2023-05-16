@@ -4,7 +4,6 @@ export interface Diagnose {
   latin?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
