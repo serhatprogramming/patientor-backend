@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", (_req, res) => {
   console.log(diagnosService.getDiagnoses());
-  res.send("all diagnoses...");
+  res.send(diagnosService.getDiagnoses());
 });
 
 export default router;
