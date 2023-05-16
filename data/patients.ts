@@ -1,4 +1,4 @@
-import { Patient, Gender } from "../src/types";
+import { Patient, Gender, HealthCheckRating } from "../src/types";
 
 const patients: Patient[] = [
   {
@@ -106,7 +106,7 @@ const patients: Patient[] = [
         specialist: "Dr Byte House",
         type: "HealthCheck",
         description: "Digital overdose, very bytestatic. Otherwise healthy.",
-        healthCheckRating: 0,
+        healthCheckRating: HealthCheckRating.Healthy,
       },
     ],
   },
