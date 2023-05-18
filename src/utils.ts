@@ -28,6 +28,7 @@ export const toNewEntry = (object: unknown): EntryWithoutId => {
           ? parseDiagnosisCodes(object.diagnosisCodes)
           : [],
     };
+    console.log("midobject: ", midObject);
     switch (object.type) {
       case "HealthCheck": {
         if ("healthCheckRating" in object) {
@@ -132,12 +133,11 @@ const parseSickLeave = (object: unknown): SickLeave => {
 };
 
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
-  if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
-    // we will just trust the data to be in correct form
+  if (!object || typeof object !== "object") {
     return [] as Array<Diagnosis["code"]>;
   }
 
-  return object.diagnosisCodes as Array<Diagnosis["code"]>;
+  return object as Array<Diagnosis["code"]>;
 };
 
 const isString = (text: unknown): text is string => {
@@ -187,9 +187,5 @@ const parseHealthRating = (rating: unknown): HealthCheckRating => {
   }
   return rating;
 };
-
-// const parseHealthRating = (rating: unknown): HealthCheckRating=>{
-//   if(!rating || isRating
-// }
 
 export default toNewPatient;

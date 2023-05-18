@@ -12,12 +12,15 @@ router.get("/", (_req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+  console.log(patientService.getPatientInfo(req.params.id));
   res.send(patientService.getPatientInfo(req.params.id));
 });
 
 router.post("/:id/entries", (req, res) => {
   try {
+    console.log("body: ", req.body);
     const newEntry = toNewEntry(req.body);
+    console.log("new entry: ", newEntry);
     const addedEntry = patientService.addEntry(newEntry, req.params.id);
     res.json(addedEntry);
   } catch (error: unknown) {

@@ -7,7 +7,6 @@ import diagnosService from "../services/diagnoseService";
 const router = express.Router();
 
 router.get("/", (_req, res) => {
-  console.log(diagnosService.getDiagnoses());
   res.send(diagnosService.getDiagnoses());
 });
 
