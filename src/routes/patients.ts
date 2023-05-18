@@ -12,7 +12,6 @@ router.get("/", (_req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  console.log(patientService.getPatientInfo(req.params.id));
   res.send(patientService.getPatientInfo(req.params.id));
 });
 
