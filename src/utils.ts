@@ -1,3 +1,5 @@
+import { SickLeave } from "./types";
+import { Discharge } from "./types";
 import {
   EntryWithoutId,
   Gender,
@@ -33,18 +35,35 @@ export const toNewEntry = (object: unknown): EntryWithoutId => {
           type: object.type,
           healthCheckRating: HealthCheckRating.CriticalRisk,
         };
-      case "OccupationalHealthcare":
-        return {
-          ...midObject,
-          type: object.type,
-          employerName: "ladjksflksdjflk",
-        };
-      case "Hospital":
-        return {
-          ...midObject,
-          type: object.type,
-          discharge: { date: "lksdlfkj", criteria: "lakjsldkfjds" },
-        };
+      case "OccupationalHealthcare": {
+        if ("employerName" in object) {
+          if ("sickLeave" in object) {
+            return {
+              ...midObject,
+              type: object.type,
+              employerName: parseField(object.employerName),
+              sickLeave: parseSickLeave(object.sickLeave),
+            };
+          }
+          return {
+            ...midObject,
+            type: object.type,
+            employerName: parseField(object.employerName),
+          };
+        }
+        throw new Error("missing field employer name");
+      }
+
+      case "Hospital": {
+        if ("discharge" in object) {
+          return {
+            ...midObject,
+            type: object.type,
+            discharge: parseDischarge(object.discharge),
+          };
+        }
+        throw new Error("discharge is missing");
+      }
       default:
         throw new Error("Type mismatch");
     }
@@ -77,6 +96,34 @@ const toNewPatient = (object: unknown): NewPatient => {
   }
 
   throw new Error("Incorrect data: some fields are missing");
+};
+
+const parseDischarge = (object: unknown): Discharge => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing field");
+  }
+
+  if ("date" in object && "criteria" in object) {
+    return {
+      date: parseDate(object.date),
+      criteria: parseField(object.criteria),
+    };
+  }
+  throw new Error("Incorrect or missing field");
+};
+
+const parseSickLeave = (object: unknown): SickLeave => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing field");
+  }
+
+  if ("startDate" in object && "endDate" in object) {
+    return {
+      startDate: parseDate(object.startDate),
+      endDate: parseDate(object.endDate),
+    };
+  }
+  throw new Error("Incorrect or missing field");
 };
 
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
