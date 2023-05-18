@@ -29,12 +29,17 @@ export const toNewEntry = (object: unknown): EntryWithoutId => {
           : [],
     };
     switch (object.type) {
-      case "HealthCheck":
-        return {
-          ...midObject,
-          type: object.type,
-          healthCheckRating: HealthCheckRating.CriticalRisk,
-        };
+      case "HealthCheck": {
+        if ("healthCheckRating" in object) {
+          return {
+            ...midObject,
+            type: object.type,
+            healthCheckRating: parseHealthRating(object.healthCheckRating),
+          };
+        }
+        throw new Error("missed health check information.");
+      }
+
       case "OccupationalHealthcare": {
         if ("employerName" in object) {
           if ("sickLeave" in object) {
@@ -171,5 +176,20 @@ const parseGender = (gender: unknown): Gender => {
 
   return gender;
 };
+
+const isRating = (param: number): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseHealthRating = (rating: unknown): HealthCheckRating => {
+  if (!rating || typeof rating !== "number" || !isRating(rating)) {
+    throw new Error("Incorrect Health Check Rating Info");
+  }
+  return rating;
+};
+
+// const parseHealthRating = (rating: unknown): HealthCheckRating=>{
+//   if(!rating || isRating
+// }
 
 export default toNewPatient;
