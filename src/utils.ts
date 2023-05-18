@@ -178,11 +178,20 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 const isRating = (param: number): param is HealthCheckRating => {
+  console.log("param: ", param);
+  console.log("values: ", Object.values(HealthCheckRating));
+  console.log("check: ", Object.values(HealthCheckRating).includes(param));
   return Object.values(HealthCheckRating).includes(param);
 };
 
 const parseHealthRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || typeof rating !== "number" || !isRating(rating)) {
+  console.log("rating: ", rating);
+  console.log("type check: ", typeof rating);
+  if (
+    (!rating && rating !== 0) ||
+    typeof rating !== "number" ||
+    !isRating(rating)
+  ) {
     throw new Error("Incorrect Health Check Rating Info");
   }
   return rating;
