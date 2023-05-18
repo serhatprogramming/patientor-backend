@@ -1,4 +1,56 @@
-import { Gender, NewPatient } from "./types";
+import {
+  EntryWithoutId,
+  Gender,
+  HealthCheckRating,
+  NewPatient,
+  Diagnosis,
+} from "./types";
+
+export const toNewEntry = (object: unknown): EntryWithoutId => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing data");
+  }
+  console.log(object);
+  if (
+    "type" in object &&
+    "description" in object &&
+    "date" in object &&
+    "specialist" in object
+  ) {
+    const midObject = {
+      description: parseField(object.description),
+      date: parseDate(object.date),
+      specialist: parseField(object.specialist),
+      diagnosisCodes:
+        "diagnosisCodes" in object
+          ? parseDiagnosisCodes(object.diagnosisCodes)
+          : [],
+    };
+    switch (object.type) {
+      case "HealthCheck":
+        return {
+          ...midObject,
+          type: object.type,
+          healthCheckRating: HealthCheckRating.CriticalRisk,
+        };
+      case "OccupationalHealthcare":
+        return {
+          ...midObject,
+          type: object.type,
+          employerName: "ladjksflksdjflk",
+        };
+      case "Hospital":
+        return {
+          ...midObject,
+          type: object.type,
+          discharge: { date: "lksdlfkj", criteria: "lakjsldkfjds" },
+        };
+      default:
+        throw new Error("Type mismatch");
+    }
+  }
+  throw new Error("Incorrect data: some fields are missing");
+};
 
 const toNewPatient = (object: unknown): NewPatient => {
   if (!object || typeof object !== "object") {
@@ -25,6 +77,15 @@ const toNewPatient = (object: unknown): NewPatient => {
   }
 
   throw new Error("Incorrect data: some fields are missing");
+};
+
+const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
+  if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
+    // we will just trust the data to be in correct form
+    return [] as Array<Diagnosis["code"]>;
+  }
+
+  return object.diagnosisCodes as Array<Diagnosis["code"]>;
 };
 
 const isString = (text: unknown): text is string => {
